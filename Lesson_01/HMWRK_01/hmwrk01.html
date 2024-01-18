@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMWRK_01</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #schedule {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .lesson {
+            box-sizing: border-box;
+            width: calc(33.33% - 20px);
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Расписание занятий по Йоге</h1>
+    <div id="schedule"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Загрузка данных из JSON
+            const scheduleData = [
+                { name: 'Занятие 1 Растяжка Для Самых Маленьких', time: '10:00', maxParticipants: 15, currentParticipants: 10 },
+                { name: 'Занятие 2 Йога С Выкрутасами Для Продвинутых', time: '14:00', maxParticipants: 15, currentParticipants: 14 },
+                { name: 'Занятие 3 Пивная Йога Для взрослых', time: '17:00', maxParticipants: 15, currentParticipants: 15 },
+                { name: 'Занятие 4 Йога За Полночь', time: '00:00', maxParticipants: 15, currentParticipants: 0 },
+            ];
+
+            // Получение элемента расписания
+            const scheduleContainer = document.getElementById('schedule');
+
+            // Перебор массива данных и создание элементов для каждого занятия.
+            scheduleData.forEach(lesson => {
+                const lessonElement = document.createElement('div');
+                lessonElement.className = 'lesson';
+
+                // Добавление информации о занятии
+                lessonElement.innerHTML = `
+                    <p>${lesson.name}</p>
+                    <p>Время: ${lesson.time}</p>
+                    <p>Макс. участников: ${lesson.maxParticipants}</p>
+                    <p>Записано: <span id="currentParticipants-${lesson.name}">${lesson.currentParticipants}</span></p>
+                    <p>Осталось мест: <span id="remainingSpots-${lesson.name}">${lesson.maxParticipants - lesson.currentParticipants}</span></p>
+                    <button id="registerButton-${lesson.name}" onclick="registerForLesson('${lesson.name}', ${lesson.maxParticipants}, ${lesson.currentParticipants})">Записаться</button>
+                `;
+
+                // Добавление элемента занятия к расписанию
+                scheduleContainer.appendChild(lessonElement);
+
+                // Проверка и установка состояния кнопки
+                updateRegisterButtonState(lesson.name, lesson.maxParticipants, lesson.currentParticipants);
+            });
+        });
+
+        // Функция для записи на занятие
+        function registerForLesson(lessonName, maxParticipants, currentParticipants) {
+            if (currentParticipants < maxParticipants) {
+                currentParticipants++;
+                updateParticipantInfo(lessonName, currentParticipants, maxParticipants - currentParticipants);
+                updateRegisterButtonState(lessonName, maxParticipants, currentParticipants);
+                alert('Вы успешно записаны на занятие!');
+            }
+        }
+
+        // Функция для обновления информации о количестве участников
+        function updateParticipantInfo(lessonName, currentParticipants, remainingSpots) {
+            const currentParticipantsElement = document.getElementById(`currentParticipants-${lessonName}`);
+            const remainingSpotsElement = document.getElementById(`remainingSpots-${lessonName}`);
+
+            if (currentParticipantsElement && remainingSpotsElement) {
+                currentParticipantsElement.textContent = currentParticipants;
+                remainingSpotsElement.textContent = remainingSpots;
+            }
+        }
+
+        // Функция для обновления состояния кнопки
+        function updateRegisterButtonState(lessonName, maxParticipants, currentParticipants) {
+            const registerButton = document.getElementById(`registerButton-${lessonName}`);
+
+            if (registerButton) {
+                registerButton.disabled = currentParticipants >= maxParticipants;
+            }
+        }
+    </script>
+</body>
+
+</html>

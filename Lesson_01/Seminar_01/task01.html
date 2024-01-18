@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Задание 1</title>
+</head>
+
+<body>
+    <!--  -->
+    <h1>Определение текущего размера окна браузера</h1>
+    <h3>ширина</h3>
+    <p class="windowWidth" style="font-size: 20px"></p>
+    <h3>высота</h3>
+    <p class="windowHeigth" style="font-size: 20px"></p>
+
+    <!--  -->
+    <h1>Управление историей переходов</h1>
+    <a href="task1.html">страница 1</a>
+    <a href="task1part2.html">страница 2</a>
+    <div>
+        <button class="backBTN">назад</button>
+        <button class="forwardBTN">вперед</button>
+    </div>
+
+    <script>
+//task1
+        const windowWidthElem = document.querySelector(".windowWidth");
+        const windowHeigth = document.querySelector(".windowHeigth");
+
+        windowWidthElem.textContent = window.innerWidth;
+        windowHeigth.textContent = window.innerHeight;
+
+        window.addEventListener("resize", (event) => {
+            windowWidthElem.textContent = window.innerWidth;
+            windowHeigth.textContent = window.innerHeight;
+        });
+
+//task2
+        window.addEventListener("beforeunload", (event) => {
+            // Отмените событие, как указано в стандарте.
+            event.preventDefault();
+            // Chrome требует установки возвратного значения.
+            event.returnValue = "";
+        });
+//task3
+
+        const backBtn = document.querySelector(".backBTN");
+        const forwardBtn = document.querySelector(".forwardBTN");
+
+        backBtn.addEventListener("click", () => {
+            window.history.back();
+        });
+
+        forwardBtn.addEventListener("click", () => {
+            window.history.forward();
+        });
+    </script>
+</body>
+
+</html>

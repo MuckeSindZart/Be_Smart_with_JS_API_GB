@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Задание 3</title>
+    <style>
+        .box {
+            border: 1px solid grey;
+            margin-bottom: 20px;
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Список статей</h1>
+        <ul class="list-group" id="articleList">
+        </ul>
+        <button class="btn btn-primary mt-3" id="addArticle">
+            Добавить статью
+        </button>
+    </div>
+
+    <script src="task3.js"></script>
+</body>
+
+</html>
+
+<script>
+    const articlesData = [
+        {
+            title: "Заголовок статьи 1",
+            content: "Содержание статьи 1",
+        },
+        {
+            title: "Заголовок статьи 2",
+            content: "Содержание статьи 2",
+        },
+    ];
+
+    const listGroupElem = document.querySelector(".list-group");
+    const addArticleButtonElem = document.getElementById("addArticle");
+
+    function renderArticle(article) {
+        const divElem = document.createElement("div");
+        divElem.classList.add("box");
+        listGroupElem.appendChild(divElem);
+
+        const h2Elem = document.createElement("h2");
+        h2Elem.textContent = article.title;
+        const pElem = document.createElement("p");
+        pElem.textContent = article.content;
+
+        const btnDeleteElem = document.createElement('button');
+        btnDeleteElem.textContent = 'удалить статью';
+        btnDeleteElem.addEventListener('click', () => deleteArticle(divElem, article));
+
+        divElem.appendChild(h2Elem);
+        divElem.appendChild(pElem);
+        divElem.appendChild(btnDeleteElem);
+    }
+
+    function deleteArticle(element, article) {
+        const index = articlesData.indexOf(article);
+        if (index !== -1) {
+            articlesData.splice(index, 1);
+            element.remove();
+        }
+    }
+
+    for (const article of articlesData) {
+        renderArticle(article);
+    }
+
+    addArticleButtonElem.addEventListener("click", () => {
+        const nameArticle = prompt("Название статьи");
+        const contentArticle = prompt("Содержание статьи");
+        const newArticle = { title: nameArticle, content: contentArticle };
+        articlesData.push(newArticle);
+        console.log(articlesData);
+
+        renderArticle(newArticle);
+    });
+</script>
