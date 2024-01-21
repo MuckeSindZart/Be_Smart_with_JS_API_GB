@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMWRK_02</title>
+    <style>
+        #slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        #slider-images {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            width: 100%;
+            box-sizing: border-box;
+            display: none; /* Изначально скрываем все изображения */
+        }
+
+        .slide.active {
+            display: block; /* Показываем только текущее изображение */
+        }
+
+        #prev-btn, #next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #prev-btn { left: 10px; }
+        #next-btn { right: 10px; }
+
+        .dots {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+
+<div id="slider-container">
+    <!-- Контейнер для картинок -->
+    <div id="slider-images">
+        <img src="image1.jpeg" alt="Image Banana" class="slide active">
+        <img src="image2.jpeg" alt="Image Mango" class="slide">
+        <img src="image3.jpeg" alt="Image Lemon" class="slide"> 
+        <img src="image3.jpeg" alt="Image Lemon" class="slide">
+        <img src="image2.jpeg" alt="Image Mango" class="slide">
+        <img src="image1.jpeg" alt="Image Banana" class="slide">  
+    </div>
+    <!-- Кнопки для переключения -->
+    <button id="prev-btn" onclick="prevSlide()">❮</button>
+    <button id="next-btn" onclick="nextSlide()">❯</button>
+    <!-- Контейнер для точек -->
+    <div class="dots" id="dots-container"></div>
+</div>
+
+<script>
+    // Инициализация переменных
+    let currentSlide = 0; //Первый слайд
+    const totalSlides = document.querySelectorAll('.slide').length; 
+    //Общее количество
+
+    // Функция для отображения текущего слайда и точек
+    function showSlide(index) {
+        const slides = document.querySelectorAll('.slide');
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+
+        const dotsContainer = document.getElementById('dots-container');
+        dotsContainer.innerHTML = ''; 
+        // Очищаем контейнер точек чтобы перерисовать
+
+        // Добавляем точки и их обработчики событий
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            dot.onclick = () => setSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+
+        // Подсвечиваем активную точку
+        dotsContainer.childNodes[currentSlide].classList.add('active');
+    }
+
+    // Функции для переключения слайдов
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        //Если текущий индекс равен 1, то (1 - 1 + 3) % 3 даст 0 (первый слайд). Это позволяет слайдеру зацикливаться между слайдами.
+        showSlide(currentSlide);
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        //Аналогично prevSlide
+        showSlide(currentSlide);
+    }
+
+    // Функция для установки слайда по индексу
+    function setSlide(index) {
+        currentSlide = index;
+        showSlide(currentSlide);
+    }
+
+    // Показываем слайд начиная с 0
+    showSlide(currentSlide);
+</script>
+</body>
+</html>
